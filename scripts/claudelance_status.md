@@ -1,26 +1,27 @@
-﻿# Claudelance Status - 2026-05-16 20:59 CST
+﻿# Claudelance Monitor — 2026-05-16 ~17:00 CST
 
-## Upstream (yeheskieltame/claudelance)
-- API timed out. No new PR comments/merges detected.
-- Latest known merge: PR #185 (design tokens) @ 2026-05-16
+## Open Bounties (B47-B54)
+| B# | Issue | Reward | On-Chain Status | Competitors |
+|----|-------|--------|-----------------|-------------|
+| B47 | #144 landing redesign | 1 CELO | OPEN | jeasop0301 (PR#176), Freeman88-tch |
+| B48 | #145 bounties feed | 1 CELO | FILLED-OFF | jeasop0301 (PR#168), Freeman88-tch |
+| B49 | #146 /bounty/[id] | 1 CELO | OPEN | Freeman88-tch, jeasop0301 |
+| B50 | #147 /post form | 1 CELO | OPEN | Freeman88-tch, TiagoAlmeidaS |
+| B51 | #148 WalletButton | 1 CELO | OPEN | openvoidsun-wq (PR#178), Freeman88-tch |
+| B52 | not posted | — | — | — |
+| B53 | not posted | — | — | — |
+| B54 | not posted | — | — | — |
 
-## Our Bounty Branches (all pushed to origin)
+## Our PRs (cycy701)
+- **#198 (B51)**: OPEN — WalletButton component. No conflicts flagged. No reviews yet.
+- **#204 (B50)**: OPEN — /post multi-step form. Competing with 2568175170 (PR#202), Homie4570 (PR#217).
+- **#206 (B49)**: OPEN — /bounty/[id] detail page. Competing with 2568175170 (PR#203), AtlasNexusOps (PR#214).
 
-| Bounty | Branch | Last Commit | Status |
-|--------|--------|-------------|--------|
-| B47 | landing-redesign | chore PR status | merged into PR branch |
-| B48 | feed-filter-ux | search+sort feed | merged into PR branch |
-| B49 | detail-page | detail page B49 | merged into PR branch |
-| B50 | post-form | post form B50 | merged into PR branch |
-| B51 | wallet-button | WalletButton B51 | merged into PR branch |
-| B52 | bounty-card-upgrade | glass morphism B52 | merged into PR branch |
-| B53 | bottom-nav-polish | nav polish B53 | merged into PR branch |
-| B54 | revenue-dashboard | RevenueCard B54 | merged into PR branch |
+## Merged (recent)
+- #185 (B41 design tokens) merged by yeheskieltame at 05:47 UTC.
 
-## Our PRs
-- No PRs exist in cycy701/claudelance (no PRs to yeheskieltame).
-- Working on ounty/b47-landing-redesign branch locally.
-- All B47-B54 code merged into single branch, ready for PR submission.
-
-## Action
-- Submit combined PR from ounty/b47-landing-redesign to yeheskieltame/claudelance main.
+## Actions
+- All 3 PRs await review/merge — watch for yeheskieltame comments.
+- B47-B51 are heavily contested (5+ competitors each). B52-B54 not yet posted.
+- No new comments on our PRs. No merge conflicts detected.
+- B48 on-chain status is FILLED-OFF-PROTOCOL — may already be claimed off-GitHub.
