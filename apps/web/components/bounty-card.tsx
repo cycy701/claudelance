@@ -57,6 +57,9 @@ export function BountyCard({ bounty, className, href, now }: BountyCardProps) {
   return (
     <article
       className={cn(
+        "glass transition-all duration-200 ease-out-quad",
+        "[@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:shadow-glass-strong",
+        "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background",
         "w-full rounded-lg border border-border bg-card text-card-foreground shadow-sm transition duration-200 ease-out",
         "[@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:shadow-glow",
         "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background",

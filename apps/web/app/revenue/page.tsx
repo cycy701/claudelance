@@ -1,10 +1,13 @@
+﻿import { RevenueCard } from "@/components/revenue-card";
 import { Suspense } from "react";
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
-  title: "Treasury & Revenue — Claudelance",
+  title: "Treasury & Revenue \u2014 Claudelance",
   description:
     "Live on-chain revenue accrued at the Claudelance treasury. Every resolved bounty contributes a 2% protocol fee plus any forfeited stake.",
 };
@@ -24,8 +27,8 @@ export default function RevenuePage() {
         <p className="mt-4 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg">
           Every resolved Claudelance bounty contributes a 2% protocol fee to the
           treasury, plus any forfeited stake from non-submitting claimers. All
-          revenue is on-chain at <code className="text-xs">0x1362d8…E423</code>{" "}
-          on Celo Mainnet — verifiable any time via Celoscan or the SDK.
+          revenue is on-chain at <code className="text-xs">0x1362d8\u2026E423</code>{" "}
+          on Celo Mainnet \u2014 verifiable any time via Celoscan or the SDK.
         </p>
 
         <Suspense
@@ -33,7 +36,7 @@ export default function RevenuePage() {
             <div className="glass mt-10 h-44 animate-pulse rounded-3xl" />
           }
         >
-          {/* Revenue card + treasury feed land in bounties B32 + B33. */}
+          <RevenueCard />
         </Suspense>
       </section>
 
