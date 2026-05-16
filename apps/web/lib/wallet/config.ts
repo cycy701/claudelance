@@ -8,3 +8,8 @@ export const wagmiConfig = createConfig({
     [celoMainnet.id]: http(),
   },
 });
+
+export function isMiniPay(): boolean {
+  if (typeof window === "undefined") return false;
+  return !!(window as any).ethereum?.isMiniPay;
+}
