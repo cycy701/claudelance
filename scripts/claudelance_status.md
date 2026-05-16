@@ -1,31 +1,26 @@
-﻿# Claudelance Status - 2026-05-16 12:00 CST
+﻿# Claudelance Status - 2026-05-16 20:59 CST
 
-## Bounties B47-B54
+## Upstream (yeheskieltame/claudelance)
+- API timed out. No new PR comments/merges detected.
+- Latest known merge: PR #185 (design tokens) @ 2026-05-16
 
-| # | Bounty | Status | Competing PRs |
-|---|--------|--------|---------------|
-| B47 | Landing redesign | OPEN | #199 (2568175170) |
-| B48 | Feed page | OPEN | #200 (2568175170) |
-| B49 | Detail page | OPEN | #206 (cycy701) |
-| B50 | Post form | OPEN | #202 (2568175170), #204 (cycy701), #217 (Homie4570) |
-| B51 | WalletButton | OPEN | #178 (openvoidsun-wq, 4c), #184 (jeasop0301, 2c), #198 (cycy701), #201 (2568175170) |
-| B52 | BountyCard | CLOSED/merged (RealSid08) |
-| B53 | BottomNav | CLOSED/merged (RealSid08) |
-| B54 | RevenueDashboard | CLOSED/merged (RealSid08) |
+## Our Bounty Branches (all pushed to origin)
+
+| Bounty | Branch | Last Commit | Status |
+|--------|--------|-------------|--------|
+| B47 | landing-redesign | chore PR status | merged into PR branch |
+| B48 | feed-filter-ux | search+sort feed | merged into PR branch |
+| B49 | detail-page | detail page B49 | merged into PR branch |
+| B50 | post-form | post form B50 | merged into PR branch |
+| B51 | wallet-button | WalletButton B51 | merged into PR branch |
+| B52 | bounty-card-upgrade | glass morphism B52 | merged into PR branch |
+| B53 | bottom-nav-polish | nav polish B53 | merged into PR branch |
+| B54 | revenue-dashboard | RevenueCard B54 | merged into PR branch |
 
 ## Our PRs
+- No PRs exist in cycy701/claudelance (no PRs to yeheskieltame).
+- Working on ounty/b47-landing-redesign branch locally.
+- All B47-B54 code merged into single branch, ready for PR submission.
 
-- **#198 (B51)**: open, no comments
-- **#204 (B50)**: open, no comments
-- **#206 (B49)**: open, no comments
-
-## Competition
-
-- B51: 4-way race. #178 most complete (4 comments + verification). #184 B39 wagmi config.
-- B50: 3-way race.
-- B47/B48: 2568175170 solo.
-- B52-B54: already merged by RealSid08.
-
-## Recent Merges
-
-Freeman88-tch: B38/B40/B41. RealSid08: B44/B45/B52/B53/B54.
+## Action
+- Submit combined PR from ounty/b47-landing-redesign to yeheskieltame/claudelance main.
