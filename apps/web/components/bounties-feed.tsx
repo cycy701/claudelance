@@ -137,7 +137,23 @@ export function BountiesFeed() {
         </Button>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1" aria-label="Bounty filters">
+      
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <input
+            type="text"
+            placeholder="Search bounties..."
+            className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none backdrop-blur transition focus:border-primary"
+            onChange={(e) => { /* search logic */ }}
+          />
+        </div>
+        <select className="rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none backdrop-blur">
+          <option>Newest first</option>
+          <option>Highest reward</option>
+          <option>Ending soon</option>
+        </select>
+      </div>
+      <div className="flex gap-2 overflow-x-auto pb-1 mt-3" aria-label="Bounty filters">
         {FILTERS.map((filter) => (
           <button
             key={filter.value}
