@@ -33,10 +33,10 @@ export function BottomNav() {
                 className={cn(
                   "flex h-14 flex-col items-center justify-center gap-1 rounded-2xl text-[11px] font-medium text-muted-foreground transition-colors",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                  active && "bg-primary text-primary-foreground shadow-glow",
+                  active && "bg-primary text-primary-foreground shadow-glow scale-105 transition-transform",
                 )}
               >
-                <Icon aria-hidden="true" className="h-5 w-5" strokeWidth={2.2} />
+                <Icon aria-hidden="true" className="h-5 w-5 transition-all duration-200" strokeWidth={active ? 2.5 : 1.8} />
                 <span>{label}</span>
               </Link>
             </li>

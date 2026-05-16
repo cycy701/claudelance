@@ -1,3 +1,4 @@
+import { RevenueCard } from "@/components/revenue-card";
 import { Suspense } from "react";
 
 import { Header } from "@/components/header";
@@ -33,7 +34,7 @@ export default function RevenuePage() {
             <div className="glass mt-10 h-44 animate-pulse rounded-3xl" />
           }
         >
-          {/* Revenue card + treasury feed land in bounties B32 + B33. */}
+          <RevenueCard />
         </Suspense>
       </section>
 
