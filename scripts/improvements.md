@@ -3,3 +3,5 @@
 
 
 - **Opt: Batch parallel reads** ¡ª 33 cycles with 1.7M tokens. Parallelize file reads with multi_tool_use to reduce cycle count. Target: <25 cycles.
+
+- **Opt: Token density** ¡ª 1.3M tokens over 27 cycles (~49K/cycle). Prefer cached context reuse over re-reading known files. Target: <30K/cycle.
