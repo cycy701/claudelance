@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarClock, Coins, ExternalLink, GitPullRequest, Loader2 } from "lucide-react";
+import { MAINNET, SEPOLIA } from "@yeheskieltame/claudelance-types";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,6 +12,7 @@ type BountyStatus = "open" | "resolved" | "cancelled" | "expired";
 type TokenFilter = "cusd" | "celo" | "usdc";
 type StatusFilter = "open" | "resolved";
 type FilterValue = "all" | TokenFilter | StatusFilter;
+type SortValue = "newest" | "reward" | "ending";
 
 type ApiBounty = {
   id?: string | number;
@@ -50,8 +52,12 @@ const TOKEN_STYLES: Record<string, string> = {
   usdc: "bg-sky-500/12 text-sky-700 ring-sky-500/25 dark:text-sky-300",
 };
 
+const TOKEN_ADDRESS_TO_SYMBOL = createTokenAddressMap();
+
 export function BountiesFeed() {
   const [activeFilter, setActiveFilter] = React.useState<FilterValue>("all");
+  const [query, setQuery] = React.useState("");
+  const [sort, setSort] = React.useState<SortValue>("newest");
   const [items, setItems] = React.useState<ApiBounty[]>([]);
   const [nextCursor, setNextCursor] = React.useState<string | null>(null);
   const [total, setTotal] = React.useState<number | null>(null);
@@ -102,6 +108,15 @@ export function BountiesFeed() {
     void loadPage(null, "replace");
   }, [loadPage]);
 
+  const visibleItems = React.useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    const searched = normalizedQuery
+      ? items.filter((bounty) => getSearchText(bounty).includes(normalizedQuery))
+      : items;
+
+    return [...searched].sort((a, b) => compareBounties(a, b, sort));
+  }, [items, query, sort]);
+
   React.useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
@@ -137,7 +152,28 @@ export function BountiesFeed() {
         </Button>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1" aria-label="Bounty filters">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <input
+            type="text"
+            placeholder="Search bounties..."
+            value={query}
+            className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none backdrop-blur transition focus:border-primary"
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </div>
+        <select
+          value={sort}
+          onChange={(event) => setSort(event.target.value as SortValue)}
+          className="rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none backdrop-blur"
+          aria-label="Sort bounties"
+        >
+          <option value="newest">Newest first</option>
+          <option value="reward">Highest reward</option>
+          <option value="ending">Ending soon</option>
+        </select>
+      </div>
+      <div className="flex gap-2 overflow-x-auto pb-1 mt-3" aria-label="Bounty filters">
         {FILTERS.map((filter) => (
           <button
             key={filter.value}
@@ -161,8 +197,12 @@ export function BountiesFeed() {
         <EmptyState message="No matching bounties yet." />
       ) : null}
 
+      {!error && items.length > 0 && visibleItems.length === 0 ? (
+        <EmptyState message="No bounties match your search." />
+      ) : null}
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((bounty, index) => (
+        {visibleItems.map((bounty, index) => (
           <BountyFeedCard key={String(bounty.id ?? index)} bounty={bounty} />
         ))}
       </div>
@@ -188,7 +228,7 @@ function BountyFeedCard({ bounty }: { bounty: ApiBounty }) {
   const token = normalizeToken(bounty);
   const status = normalizeStatus(bounty.status);
   const deadline = formatDeadline(bounty.deadline);
-  const amount = formatAmount(bounty.amount);
+  const amount = formatAmount(bounty.amount, token);
   const title = bounty.title ?? deriveTitle(bounty);
   const description = bounty.description ?? bounty.instructionUrl ?? "Review the linked issue for full acceptance criteria.";
   const href = bounty.instructionUrl ?? bounty.targetRepoUrl ?? `/bounty/${bounty.id ?? ""}`;
@@ -262,11 +302,31 @@ function isStatusFilter(value: FilterValue): value is StatusFilter {
 
 function normalizeToken(bounty: ApiBounty) {
   const symbol = bounty.tokenSymbol ?? bounty.token ?? "cUSD";
-  const normalized = symbol.toString().replace(/^0x[a-f0-9]+$/i, "cUSD").toLowerCase();
+  const raw = symbol.toString();
+  const mappedSymbol = TOKEN_ADDRESS_TO_SYMBOL.get(raw.toLowerCase());
+  if (mappedSymbol) return mappedSymbol;
+
+  const normalized = raw.toLowerCase();
   if (normalized === "cusd") return "cUSD";
   if (normalized === "celo") return "CELO";
   if (normalized === "usdc") return "USDC";
-  return symbol.toString();
+  return raw;
+}
+
+function createTokenAddressMap() {
+  const entries: Array<[string, "cUSD" | "CELO" | "USDC"]> = [];
+  const add = (address: string | undefined, symbol: "cUSD" | "CELO" | "USDC") => {
+    if (address) entries.push([address.toLowerCase(), symbol]);
+  };
+
+  add(MAINNET.tokens.cUSD, "cUSD");
+  add(SEPOLIA.tokens.cUSD, "cUSD");
+  add(MAINNET.tokens.CELO, "CELO");
+  add(SEPOLIA.tokens.CELO, "CELO");
+  add(MAINNET.tokens.USDC, "USDC");
+  add(SEPOLIA.tokens.USDC, "USDC");
+
+  return new Map(entries);
 }
 
 function normalizeStatus(status: ApiBounty["status"]): BountyStatus {
@@ -276,11 +336,14 @@ function normalizeStatus(status: ApiBounty["status"]): BountyStatus {
   return "open";
 }
 
-function formatAmount(amount: ApiBounty["amount"]) {
+function formatAmount(amount: ApiBounty["amount"], token: string) {
   if (amount === undefined || amount === null || amount === "") return "0";
   const numeric = Number(amount);
   if (!Number.isFinite(numeric)) return String(amount);
-  if (numeric > 1_000_000) return (numeric / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 });
+  if (numeric > 1_000_000) {
+    const decimals = token === "USDC" ? 6 : 18;
+    return (numeric / 10 ** decimals).toLocaleString(undefined, { maximumFractionDigits: 2 });
+  }
   return numeric.toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
 
@@ -305,6 +368,46 @@ function deriveTitle(bounty: ApiBounty) {
     return bounty.targetRepoUrl.replace(/^https?:\/\/github\.com\//, "");
   }
   return `Bounty ${bounty.id ?? ""}`.trim();
+}
+
+function getSearchText(bounty: ApiBounty) {
+  return [
+    bounty.id,
+    bounty.title,
+    bounty.description,
+    bounty.repo,
+    bounty.targetRepoUrl,
+    bounty.instructionUrl,
+    normalizeToken(bounty),
+    normalizeStatus(bounty.status),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+function compareBounties(a: ApiBounty, b: ApiBounty, sort: SortValue) {
+  if (sort === "reward") return getAmountValue(b) - getAmountValue(a);
+  if (sort === "ending") return getDeadlineValue(a) - getDeadlineValue(b);
+  return getIdValue(b) - getIdValue(a);
+}
+
+function getAmountValue(bounty: ApiBounty) {
+  const amount = Number(bounty.amount ?? 0);
+  if (!Number.isFinite(amount)) return 0;
+  if (amount <= 1_000_000) return amount;
+  return amount / 10 ** (normalizeToken(bounty) === "USDC" ? 6 : 18);
+}
+
+function getDeadlineValue(bounty: ApiBounty) {
+  const deadline = Number(bounty.deadline ?? Number.MAX_SAFE_INTEGER);
+  if (!Number.isFinite(deadline)) return Number.MAX_SAFE_INTEGER;
+  return deadline;
+}
+
+function getIdValue(bounty: ApiBounty) {
+  const id = Number(bounty.id ?? 0);
+  return Number.isFinite(id) ? id : 0;
 }
 
 function capitalize(value: string) {

@@ -23,11 +23,10 @@ A: No. With ciRequired=true + ciPassed=true on a Resolved bounty, you
    ciRequired=false bounties as long as you submitted.
 
 Q: Where exactly does my payout land?
-A: pickWinner credits earnings[you] with bountyAmount * 98%. Stake
-   refunds add bountyStake to earnings[you] when someone calls
-   settleStake(bountyId, you). withdrawEarnings() pays out the full
-   balance to your wallet. Three separate concepts, one shared
-   earnings mapping.
+A: pickWinner transfers bountyAmount * 98% directly to your wallet.
+   Stake refunds add bountyStake to earnings[you] when someone calls
+   settleStake(bountyId, you). withdrawEarnings() only pulls those
+   credited refunds, not the winner bounty payout.
 
 Q: Is anyone allowed to call settleStake on my behalf, or only me?
 A: Anyone. The contract enforces the refund-vs-forfeit rules

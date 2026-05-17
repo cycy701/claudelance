@@ -1,6 +1,6 @@
 # Privy Setup
 
-The web app uses `@privy-io/react-auth` for the upcoming authentication provider integration. This document covers the App ID setup only; the provider component is intentionally left for the follow-up bounty.
+The web app uses `@privy-io/react-auth` for the unified wallet entrypoint. Privy is enabled only when `NEXT_PUBLIC_PRIVY_APP_ID` is present; otherwise the app falls back to the wagmi injected wallet connector so local development still works without dashboard setup.
 
 ## Create an App ID
 
@@ -30,4 +30,4 @@ MiniPay runs inside Opera's mobile wallet browser. Keep the Privy configuration 
 - Test auth inside the MiniPay in-app browser before shipping provider wiring.
 - Avoid provider-side redirects that assume a desktop browser extension wallet.
 
-The SDK dependency and `NEXT_PUBLIC_PRIVY_APP_ID` environment variable are now available for the provider integration bounty.
+The provider wiring lives in `app/providers.tsx`, and `<WalletButton />` uses Privy for normal browsers while keeping MiniPay/injected-wallet fallback behavior.

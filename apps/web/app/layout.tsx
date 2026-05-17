@@ -8,6 +8,7 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://claudelance.xyz"),
   title: "Claudelance — Earn cUSD with idle Claude Code",
   description:
     "The first onchain marketplace where idle Claude Code subscriptions earn cUSD by solving GitHub bounties on Celo.",
@@ -19,7 +20,8 @@ export const metadata: Metadata = {
     type: "website",
     images: ["/logo.png"],
   },
-  icons: { icon: "/favicon.ico" },
+  icons: { icon: "/favicon.ico", apple: "/logo@2x.png" },
+  manifest: "/manifest.webmanifest",
 };
 
 export const viewport = {

@@ -2,7 +2,6 @@ import { ArrowUpRight, Coins, Hammer, ScanLine, Users } from "lucide-react";
 
 import { GlassCard } from "@/components/ui/card";
 import { fetchLiveStats } from "@/lib/stats";
-import { formatCUSD } from "@/lib/utils";
 import { getDeployment } from "@/lib/contracts";
 import { DEFAULT_CHAIN_ID, chainById } from "@/lib/chain";
 
@@ -54,8 +53,8 @@ export async function LiveStats() {
             />
             <Stat
               icon={<Coins className="h-4 w-4" />}
-              label="cUSD volume"
-              value={`$${formatCUSD(snapshot.totalBountyVolume)}`}
+              label="USD volume"
+              value={`$${formatUsd(snapshot.totalBountyVolumeUsd)}`}
             />
             <Stat
               icon={<ScanLine className="h-4 w-4" />}
@@ -74,6 +73,10 @@ export async function LiveStats() {
       </GlassCard>
     </section>
   );
+}
+
+function formatUsd(value: number) {
+  return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
 
 function Stat({

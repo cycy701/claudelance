@@ -341,6 +341,7 @@ contract ClaudelanceCoreTest is Test {
         _attest(id, w1, true);
         _attest(id, w2, true);
 
+        uint256 winnerBalanceBefore = cusd.balanceOf(w1);
         vm.prank(poster);
         core.pickWinner(id, w1);
 
@@ -348,11 +349,12 @@ contract ClaudelanceCoreTest is Test {
         uint96 expectedPayout = AMOUNT - expectedFee;
 
         assertEq(_earnings(treasury), expectedFee, "treasury fee credited via earnings");
-        assertEq(_earnings(w1), uint256(expectedPayout), "winner payout only; stake pending settleStake");
+        assertEq(cusd.balanceOf(w1), winnerBalanceBefore + expectedPayout, "winner payout sent to wallet");
+        assertEq(_earnings(w1), 0, "winner stake pending settleStake");
         assertEq(_earnings(w2), 0, "loser stake pending settleStake");
 
         _settleAll(id);
-        assertEq(_earnings(w1), uint256(expectedPayout) + STAKE, "winner stake refunded");
+        assertEq(_earnings(w1), STAKE, "winner stake refunded");
         assertEq(_earnings(w2), STAKE, "good-faith loser stake refunded");
 
         assertEq(core.totalProtocolRevenue(address(cusd)), expectedFee);
@@ -416,7 +418,7 @@ contract ClaudelanceCoreTest is Test {
         _settleAll(id);
 
         uint96 fee = uint96((uint256(AMOUNT) * 200) / 10_000);
-        assertEq(_earnings(w1), uint256(AMOUNT - fee) + STAKE);
+        assertEq(_earnings(w1), STAKE);
         assertEq(_earnings(w2), STAKE);
         assertEq(_earnings(w3), 0);
         assertEq(_earnings(treasury), fee + STAKE);
@@ -474,7 +476,7 @@ contract ClaudelanceCoreTest is Test {
         _settleAll(id);
 
         uint96 fee = uint96((uint256(AMOUNT) * 200) / 10_000);
-        assertEq(_earnings(w1), uint256(AMOUNT - fee) + STAKE);
+        assertEq(_earnings(w1), STAKE);
         assertEq(_earnings(w2), STAKE);
         assertEq(_earnings(w3), 0);
         assertEq(_earnings(treasury), fee + STAKE);
@@ -487,6 +489,7 @@ contract ClaudelanceCoreTest is Test {
         _attest(id, w1, true);
         vm.prank(poster);
         core.pickWinner(id, w1);
+        core.settleStake(id, w1);
 
         uint256 expected = _earnings(w1);
         uint256 before = cusd.balanceOf(w1);
@@ -507,6 +510,7 @@ contract ClaudelanceCoreTest is Test {
         _attest(id, w1, true);
         vm.prank(poster);
         core.pickWinner(id, w1);
+        core.settleStake(id, w1);
 
         vm.prank(owner);
         core.pause();
@@ -763,7 +767,7 @@ contract ClaudelanceCoreTest is Test {
         core.settleStake(id, w1);
 
         uint96 fee = uint96((uint256(AMOUNT) * 200) / 10_000);
-        assertEq(_earnings(w1), uint256(AMOUNT - fee) + STAKE);
+        assertEq(_earnings(w1), STAKE);
         IClaudelanceCore.Bounty memory b = core.getBounty(id);
         assertEq(uint8(b.status), uint8(IClaudelanceCore.BountyStatus.Resolved));
     }
@@ -1135,7 +1139,7 @@ contract ClaudelanceCoreTest is Test {
 
         assertEq(payout + fee, uint256(amount), "payout + fee must equal amount");
         assertEq(_earnings(treasury), fee, "treasury fee credited via earnings");
-        assertEq(_earnings(w1), payout + STAKE, "winner earnings = payout + stake refund");
+        assertEq(_earnings(w1), STAKE, "winner earnings only track stake refund after direct payout");
     }
 
     function test_Events_WithdrawalAndCancelEmit() public {
@@ -1145,6 +1149,7 @@ contract ClaudelanceCoreTest is Test {
         _attest(id, w1, true);
         vm.prank(poster);
         core.pickWinner(id, w1);
+        core.settleStake(id, w1);
 
         uint256 owed = _earnings(w1);
         vm.expectEmit(true, true, false, true);
@@ -1282,7 +1287,7 @@ contract ClaudelanceCoreTest is Test {
         core.settleStake(id, w1);
 
         uint96 fee = uint96((uint256(AMOUNT) * 200) / 10_000);
-        assertEq(_earnings(w1), uint256(AMOUNT - fee) + STAKE);
+        assertEq(_earnings(w1), STAKE);
         assertEq(_earnings(treasury), fee);
     }
 
@@ -1333,11 +1338,13 @@ contract ClaudelanceCoreTest is Test {
         assertEq(core.totalBountyVolume(address(usdc)), 3e18);
         assertGt(core.totalProtocolRevenue(address(cusd)), 0);
         assertGt(core.totalProtocolRevenue(address(usdc)), 0);
-        assertGt(core.earnings(w1, address(cusd)), 0);
-        assertGt(core.earnings(w1, address(usdc)), 0);
+        assertEq(core.earnings(w1, address(cusd)), 0);
+        assertEq(core.earnings(w1, address(usdc)), 0);
 
         uint256 cusdBefore = cusd.balanceOf(w1);
         uint256 usdcBefore = usdc.balanceOf(w1);
+        core.settleStake(cusdId, w1);
+        core.settleStake(usdcId, w1);
         vm.prank(w1);
         core.withdrawEarnings(_cusd());
         vm.prank(w1);

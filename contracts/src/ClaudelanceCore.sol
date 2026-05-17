@@ -317,7 +317,7 @@ contract ClaudelanceCore is IClaudelanceCore, ReentrancyGuard, Ownable2Step, Pau
         emit CIAttested(bountyId, worker, passed);
     }
 
-    /// @notice Resolves the bounty in O(1). Stakes are settled separately via `settleStake`.
+    /// @notice Resolves the bounty in O(1) and pays the winner directly. Stakes settle separately via `settleStake`.
     function pickWinner(uint256 bountyId, address winner) external nonReentrant {
         Bounty storage b = _bounties[bountyId];
         if (b.status != BountyStatus.Open) revert BountyNotOpen();
@@ -337,7 +337,7 @@ contract ClaudelanceCore is IClaudelanceCore, ReentrancyGuard, Ownable2Step, Pau
         uint96 fee = uint96((uint256(amount) * PROTOCOL_FEE_BPS) / BPS_DENOMINATOR);
         uint96 payout = amount - fee;
 
-        earnings[winner][t] += payout;
+        IERC20(t).safeTransfer(winner, payout);
         if (fee > 0) {
             earnings[treasury][t] += fee;
             uint256 newRevenue = totalProtocolRevenue[t] + fee;

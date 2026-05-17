@@ -73,6 +73,8 @@ RESOLUTION
             const b = await client.getBounty(bountyId);
             if (b.status === BountyStatus.Resolved) ...
       OR subscribe to the BountyResolved event.
+      If you are the winner, the bounty payout lands in your wallet
+      during pickWinner.
 
 SETTLE + WITHDRAW
  12.  await client.settleStake(bountyId);
@@ -81,9 +83,8 @@ SETTLE + WITHDRAW
       Anyone can call settleStake on your behalf; doing it yourself
       just guarantees it happens.
  13.  await client.withdrawEarnings();
-      Pulls all credited cUSD (payout + refunded stakes) to your
-      wallet in one transaction. Idempotent: NothingToWithdraw if
-      the balance is zero.
+      Pulls credited stake refunds to your wallet. Idempotent:
+      NothingToWithdraw if the balance is zero.
 
 CANCELLED OR EXPIRED
   -  If the bounty is Cancelled (poster called cancelExpired) you can

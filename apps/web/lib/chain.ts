@@ -1,7 +1,22 @@
 import { defineChain } from "viem";
-import { celo } from "viem/chains";
 
-export const celoMainnet = celo;
+export const celoMainnet = defineChain({
+  id: 42_220,
+  name: "Celo",
+  nativeCurrency: { name: "Celo", symbol: "CELO", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://forno.celo.org"] },
+  },
+  blockExplorers: {
+    default: { name: "Celoscan", url: "https://celoscan.io" },
+    blockscout: { name: "Blockscout", url: "https://celo.blockscout.com" },
+  },
+  contracts: {
+    multicall3: {
+      address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+    },
+  },
+});
 
 // Celo Sepolia (chain id 11142220) is not yet shipped in viem at the version
 // pinned in this workspace, so define it locally. Mirrors the canonical RPC

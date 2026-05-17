@@ -2,11 +2,12 @@ import { createPublicClient, http } from "viem";
 
 import { celoSepolia, DEFAULT_CHAIN_ID, chainById } from "./chain";
 import { coreAbi, getDeployment } from "./contracts";
+import { tokenToUsd, type SupportedToken } from "./usd-conversion";
 
 export type LiveStats = {
   bountyCount: bigint;
-  totalBountyVolume: bigint;
-  totalProtocolRevenue: bigint;
+  totalBountyVolumeUsd: number;
+  totalProtocolRevenueUsd: number;
   totalBountiesResolved: bigint;
   uniquePosterCount: bigint;
   uniqueWorkerCount: bigint;
@@ -25,36 +26,33 @@ export async function fetchLiveStats(chainId: number = DEFAULT_CHAIN_ID): Promis
   const rpc = rpcOverrides[chainId] ?? chain.rpcUrls.default.http[0];
   const client = createPublicClient({ chain, transport: http(rpc) });
   const deploy = getDeployment(chainId);
+  const tokenEntries = Object.entries(deploy.tokens) as Array<[SupportedToken, `0x${string}`]>;
 
-  const reads = await client.multicall({
-    contracts: [
-      { address: deploy.core, abi: coreAbi, functionName: "bountyCount" },
-      { address: deploy.core, abi: coreAbi, functionName: "totalBountyVolume" },
-      { address: deploy.core, abi: coreAbi, functionName: "totalProtocolRevenue" },
-      { address: deploy.core, abi: coreAbi, functionName: "totalBountiesResolved" },
-      { address: deploy.core, abi: coreAbi, functionName: "uniquePosterCount" },
-      { address: deploy.core, abi: coreAbi, functionName: "uniqueWorkerCount" },
-      { address: deploy.core, abi: coreAbi, functionName: "PROTOCOL_FEE_BPS" },
-      { address: deploy.core, abi: coreAbi, functionName: "RESOLUTION_GRACE_PERIOD" },
-    ],
-    allowFailure: false,
-  });
-
-  const [
-    bountyCount,
-    totalBountyVolume,
-    totalProtocolRevenue,
-    totalBountiesResolved,
-    uniquePosterCount,
-    uniqueWorkerCount,
-    feeBps,
-    graceSeconds,
-  ] = reads;
+  const [bountyCount, totalBountiesResolved, uniquePosterCount, uniqueWorkerCount, feeBps, graceSeconds, tokenStats] =
+    await Promise.all([
+      client.readContract({ address: deploy.core, abi: coreAbi, functionName: "bountyCount" }),
+      client.readContract({ address: deploy.core, abi: coreAbi, functionName: "totalBountiesResolved" }),
+      client.readContract({ address: deploy.core, abi: coreAbi, functionName: "uniquePosterCount" }),
+      client.readContract({ address: deploy.core, abi: coreAbi, functionName: "uniqueWorkerCount" }),
+      client.readContract({ address: deploy.core, abi: coreAbi, functionName: "PROTOCOL_FEE_BPS" }),
+      client.readContract({ address: deploy.core, abi: coreAbi, functionName: "RESOLUTION_GRACE_PERIOD" }),
+      Promise.all(
+        tokenEntries.map(async ([token, tokenAddress]) => ({
+          token,
+          stats: await client.readContract({
+            address: deploy.core,
+            abi: coreAbi,
+            functionName: "getStats",
+            args: [tokenAddress],
+          }),
+        })),
+      ),
+    ]);
 
   return {
     bountyCount,
-    totalBountyVolume,
-    totalProtocolRevenue,
+    totalBountyVolumeUsd: tokenStats.reduce((sum, { token, stats }) => sum + tokenToUsd(token, stats[0]), 0),
+    totalProtocolRevenueUsd: tokenStats.reduce((sum, { token, stats }) => sum + tokenToUsd(token, stats[1]), 0),
     totalBountiesResolved,
     uniquePosterCount,
     uniqueWorkerCount,

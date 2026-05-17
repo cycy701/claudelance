@@ -141,8 +141,12 @@ contract ClaudelanceHandler is CommonBase, StdCheats, StdUtils {
         address[] memory cs = core.getClaimers(id);
         if (cs.length == 0) return;
         address winner = cs[actorSeed % cs.length];
+        uint256 fee = (uint256(b.amount) * core.PROTOCOL_FEE_BPS()) / core.BPS_DENOMINATOR();
+        uint256 payout = uint256(b.amount) - fee;
         vm.prank(b.poster);
-        try core.pickWinner(id, winner) {} catch {}
+        try core.pickWinner(id, winner) {
+            totalWithdrawnByActors += payout;
+        } catch {}
     }
 
     function cancelExpired(uint256 actorSeed, uint256 bountySeed, uint256 warpBy)

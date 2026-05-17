@@ -49,6 +49,8 @@ WINNER SELECTION
   - The winner must (a) have claimed a slot, (b) have submitted a PR,
     and (c) — if ciRequired — have ciPassed == true.
   - Winner earns: bountyAmount * 98% (minus the 2% protocol fee).
+    This bounty payout is transferred directly to the winner wallet
+    inside pickWinner.
   - Treasury accrues: bountyAmount * 2%.
   - Stake settlement happens separately (see below).
 
@@ -73,10 +75,11 @@ CANCELLATION
   - The 3-day grace exists so a third party cannot race a passing
     worker out of their pickWinner.
 
-PAYMENT (pull pattern)
-  - All cUSD payouts route through earnings[address]; nothing is
-    pushed. Workers, posters, and treasury must each call
-    withdrawEarnings() to pull their accrued cUSD.
+PAYMENT
+  - Winner bounty payouts are pushed directly to the winner wallet
+    during pickWinner.
+  - Stake refunds, poster cancellation refunds, and treasury fees use
+    earnings[address] and withdrawEarnings().
   - withdrawEarnings is callable EVEN WHEN THE CONTRACT IS PAUSED so
     users can always exit.
 
