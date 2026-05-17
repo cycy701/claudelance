@@ -1,27 +1,26 @@
-ï»¿# Claudelance Status â€” 2026-05-16 21:45 CST
-
-## Our PRs
-- **#198** (B51 WalletButton) â€” OPEN, MERGEABLE, no reviews
-- **#204** (B50 /post form) â€” OPEN, MERGEABLE, no reviews
-- **#206** (B49 bounty detail) â€” OPEN, MERGEABLE, no reviews
+# Claudelance Monitor ¡ª 2026-05-17
 
 ## B47-B54 Status
-| Bounty | Issue | Status | Key Detail |
-|--------|-------|--------|------------|
-| B47 landing | #144 | OPEN | Competing PRs #208; no cycy701 submission |
-| B48 feed | #145 | FILLED | PR #168 merged, paid direct |
-| B49 detail | #146 | OPEN | Competing PRs #214; we submitted #206 |
-| B50 post | #147 | OPEN | Competing PR #180; we submitted #204 |
-| B51 wallet | #148 | OPEN | Competing PRs #178 #215; we submitted #198 |
-| B52 mobile card | â€” | MERGED | PR #166 merged |
-| B53 bottom nav | â€” | MERGED | PR #161 merged |
-| B54 tx toast | â€” | MERGED | PR #162 merged |
+| Bounty | Issue | State | Comments | Title |
+|--------|-------|-------|----------|-------|
+| B47 | #144 | OPEN | 10 | Landing page redesign |
+| B48 | #145 | CLOSED | 10 | Bounties feed page |
+| B49 | #146 | OPEN | 10 | /bounty/[id] detail page |
+| B50 | #147 | OPEN | 10 | /post multi-step poster form |
+| B51 | #148 | OPEN | 11 | WalletButton Privy+MiniPay |
+| B52 | #149 | CLOSED | 6 | BountyCard mobile-first |
+| B53 | #150 | CLOSED | 7 | BottomNav mobile |
+| B54 | #151 | CLOSED | 7 | TransactionToast sonner |
 
-## Merged Today
-#185 (B41), #169 (B45), #168 (B48), #167 (B44), #166 (B52), #163 (Privy), #162 (B54), #161 (B53), #154 (B43/B46)
+## Our PRs (cycy701)
+| PR | Bounty | State | Merged |
+|----|--------|-------|--------|
+| #198 | B51 | CLOSED | No |
+| #204 | B50 | CLOSED | No |
+| #206 | B49 | CLOSED | No |
 
 ## Notes
-- B52-B54 already merged, no further action needed
-- B51 Winner selected (#178) but on-chain still open â€” our #198 can still compete
-- B50 Winner selected (#180) â€” our #204 also open
-- B47, B49 no cycy701 PRs yet â€” opportunity
+- B48 B52 B53 B54 closed ¡ª winners merged (RealSid08, cx306806112, etc)
+- B47 B49 B50 B51 still OPEN ¡ª Freeman88-tch posted /opire on all 4 but no merged winner yet
+- Our PRs #198 #204 #206 all closed unmerged ¡ª likely duplicate/outcompeted
+- Next: rework B47 landing page (still open, 10 comments, no clear winner)
