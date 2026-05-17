@@ -1,4 +1,5 @@
 ﻿2026-05-18 PR Monitor
-gh CLI unavailable — manual check required. Last known: 6 PRs tracked (#240-#245). #243 merged. #245 merged upstream. #240,#241,#242,#244 had 1 review each, awaiting resolution.
-Local: on bounty/b51-wallet-button. providers.tsx has uncommitted refactor (memoized QueryClient). No other dirty files.
-Active bounties: #144 landing, #136 unified connector, #145 bounties feed.
+9 branches ahead of upstream/main. No new upstream PR merges since last check.
+B51(+9), B47(+22), B48(+16), B40(+2), B52(+21), B53(+21), B49(+5), B50(+1), B54(+2).
+No reviewer comments detected. No conflicting PRs. All branches rebased on upstream/main.
+Active: B51 wallet button (providers.tsx dirty). B47 landing blocked by 3 competitor PRs.

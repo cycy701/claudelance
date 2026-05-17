@@ -1,28 +1,26 @@
-# Claudelance Status - 2026-05-16
+﻿# Claudelance Status — 2026-05-18
 
-## Our PRs (cycy701)
-| PR | Bounty | Status | Title |
+## B47-B54 Bounties
+| # | Status | Title | Comments |
 |---|---|---|---|
-| #198 | B51 | OPEN | WalletButton component |
-| #204 | B50 | OPEN | /post multi-step form |
-| #206 | B49 | OPEN | /bounty/[id] detail page |
+| #144 (B47) | open | Landing page redesign | 10 |
+| #145 (B48) | **closed** | Bounties feed page | 10 |
+| #146 (B49) | open | /bounty/[id] detail | 10 |
+| #147 (B50) | open | /post multi-step form | 10 |
+| #148 (B51) | open | WalletButton | 11 |
+| #149 (B52) | closed | BountyCard mobile | 6 |
+| #150 (B53) | closed | BottomNav mobile | 7 |
+| #151 (B54) | closed | TransactionToast | 7 |
 
-No reviews yet. No comments. No merges.
+## Our PRs
+- **PR#198** — closed, **not merged** (B51 WalletButton) — 1 comment, 1 review
+- **PR#204** — closed, **not merged** (B50 /post form) — 1 comment
+- **PR#206** — closed, **not merged** (B49 detail page) — 1 comment
 
-## B47-B54 Activity
-| Bounty | Open PRs | Latest |
-|---|---|---|
-| B47 landing | #208 (AtlasNexusOps) | new |
-| B48 feed | #200 (2568175170) | no recent |
-| B49 detail | #206 (us), #203, #214 (AtlasNexusOps) | #214 new |
-| B50 /post | #204 (us), #202, #217 (Homie4570/Floyd) | #217 new |
-| B51 wallet | #198 (us), #201, #209, #215 | #215 new |
-| B52-B54 | no PRs yet | open |
+## Recent Activity
+- #145 (B48) closed: last comments by jeasop0301, TiagoAlmeidaS, yeheskieltame on 05-16
+- B52-B54 closed (BountyCard, BottomNav, TransactionToast) — competitors merged
+- All our PRs closed without merge — likely outcompeted on B49/B50/B51
 
-## Competitive Note
-- Highest contention: B49 (4 PRs), B50 (3), B51 (4)
-- AtlasNexusOps pushing B47/49/40/42
-- Floyd bot (LoneStarOracle) entered B50 via Homie4570
-- #187 (B38 Privy SDK) closed unmerged by Freeman88-tch - will resubmit
-
-API rate-limited for issue details.
+## Open targets
+B47 (landing), B49 (detail), B50 (post), B51 (wallet) still open despite closed PRs
