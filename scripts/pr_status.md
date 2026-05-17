@@ -1,2 +1,4 @@
 ﻿2026-05-18 PR Monitor
-6 PRs: 243(merged),244(open,1review),245(open),240(open,1review),241(open,1review),242(open,1review). No new comments or activity since last cycle. Merged: 243. Open PRs stale — awaiting reviewer action. No replies drafted.
+gh CLI unavailable — manual check required. Last known: 6 PRs tracked (#240-#245). #243 merged. #245 merged upstream. #240,#241,#242,#244 had 1 review each, awaiting resolution.
+Local: on bounty/b51-wallet-button. providers.tsx has uncommitted refactor (memoized QueryClient). No other dirty files.
+Active bounties: #144 landing, #136 unified connector, #145 bounties feed.
